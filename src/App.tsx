@@ -3,14 +3,17 @@ import Logo from './assets/Logo.png'
 import { CardNote } from './components/cardNote'
 import { NewNote } from './components/newNote'
 
+// Typagem dos props recebidos
 interface Nota {
   id: number,
   date: Date,
   text: string
 }
+
 function App() {
   const [search, setSearch] = useState('')
   const [notas, setNotas] = useState<Nota[]>(() => {
+    // Se localstorage existir, ele sera retornado, se não, retorna um array vazio
     if (localStorage.notes) {
       return JSON.parse(localStorage.notes)
     } else {
@@ -18,23 +21,20 @@ function App() {
     }
   })
 
-  useEffect(() => {
-    console.log(notas)
-  }, [notas])
-
+  // Salva nova nota no useState e no localstorage
   function newNota(content: string) {
-    console.log(content)
     setNotas([{ id: notas.length + 1, date: new Date(), text: content }, ...notas])
-    console.log(notas)
 
     localStorage.setItem('notes', JSON.stringify(notas))
   }
 
+  // Muda text de pesquisa
   function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     let query = e.target.value
     setSearch(query)
   }
 
+  // Deleta nota do useState e do localstorage
   function handleDeleteNote(id: number){
     let newArray = notas.filter(note => note.id != id)
     setNotas(newArray)
@@ -51,6 +51,7 @@ function App() {
       <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
         <NewNote newNota={newNota} />
 
+        {/* Se uma pesquisa estiver sendo feita, sera filtrado pela pesquisa, se não sera mostrado todas as notas salvas */}
         {notas && search ?
           notas.filter(nota => nota.text.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map((value, key) => {
             return <CardNote key={key} note={{

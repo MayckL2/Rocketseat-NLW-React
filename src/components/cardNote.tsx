@@ -3,8 +3,6 @@ import { X } from 'lucide-react';
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale"
 
-// https://app.rocketseat.com.br/certificates/6a025b1e-2d40-4f03-9787-b5b26989fc81
-
 interface Props {
     note: {
         id: number,

@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import * as Radix from '@radix-ui/react-dialog'
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 
@@ -13,14 +13,22 @@ export function NewNote({newNota}: Props) {
     const [content, setContent] = useState('')
     const [open, setOpen] = useState(false)
 
+    // Fecha área de texto quando modal for fechado
+    useEffect(()=>{
+        setShowTextArea(false)
+    },[open])
+
+    // Mostra área de texto
     function handleTextArea() {
         setShowTextArea(!showTextArea)
     }
 
+    // Coleta o texto digitado na área de texto
     function handleChangeText(event: ChangeEvent<HTMLTextAreaElement>) {
         setContent(event.target.value)
     }
 
+    // Salva conteúdo digitado em um novo card e fecha o modal
     function handleSubmit(event: FormEvent) {
         event.preventDefault()
 
@@ -61,6 +69,7 @@ export function NewNote({newNota}: Props) {
 
                             <p className='p-4'>Adicionar nota</p>
 
+                            {/* Quando showTextArea for true, mostrara o textarea, se não mostrara texto alternativo */}
                             {showTextArea ? <>
                                 <textarea autoFocus onChange={handleChangeText} className="px-4 placeholder:text-slate-500 placeholder:text-sm text-slate-500 z-10 bg-transparent focus:outline-none resize-none h-full" />
                                 <button className='bg-lime-500 py-2 hover:bg-lime-600 transition-all'>Salvar nota</button>

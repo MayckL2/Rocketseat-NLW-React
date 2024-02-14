@@ -2,6 +2,7 @@ import * as Radix from '@radix-ui/react-dialog'
 import { X } from 'lucide-react';
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale"
+import {useState} from 'react'
 
 interface Props {
     note: {
@@ -13,9 +14,16 @@ interface Props {
 }
 
 export function CardNote({ note, deleteNote }: Props) {
+    const [open, setOpen] = useState(false)
+
+    // Deleta nota e fecha modal
+    function handleDelete(){
+        deleteNote(note.id)
+        setOpen(false)
+    }
 
     return (
-        <Radix.Root>
+        <Radix.Root open={open} onOpenChange={setOpen}>
             <Radix.Trigger>
                 <div className="p-4 flex flex-col gap-2 rounded-lg bg-slate-800 relative h-56 outline-gray-500 hover:outline transition-all">
                     <p className="text-start font-bold z-10">
@@ -49,7 +57,7 @@ export function CardNote({ note, deleteNote }: Props) {
                             {note.text}
                         </p>
                                 
-                        <button type='button' onClick={()=> deleteNote(note.id)} className='bg-slate-800 py-2 hover:bg-slate-900 transition-all'>Deseja <span className='text-red-500'>apagar esta nota?</span></button>
+                        <button type='button' onClick={handleDelete} className='bg-slate-800 py-2 hover:bg-slate-900 transition-all'>Deseja <span className='text-red-500'>apagar esta nota?</span></button>
 
                     </Radix.Content>
                 </Radix.Overlay>
